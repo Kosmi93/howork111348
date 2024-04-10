@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class StringListImp implements StringList {
     private String[] array;
-    private int index = -1;
+    private int count = 0;
 
     public StringListImp(int size) {
         array = new String[size];
@@ -12,29 +12,36 @@ public class StringListImp implements StringList {
 
     @Override
     public String add(String item) {
-        if (index < array.length - 1) {
-            index++;
-            array[index] = item;
+        if(item==null)
+            throw new NullPointerException("В массиве запрещено хранить null значения")
+        if (count < array.length) {
+            array[count] = item;
+            count++;
         }
-        return array[index];
+        return array[count -1];
     }
 
     @Override
     public String add(int index, String item) {
-        if (index > this.index)
+        if(item==null)
+            throw new NullPointerException("В массиве запрещено хранить null значения")
+        if (index > this.count)
             throw new IndexOutOfBoundsException("Количество элементов в массиве меньше данного числа");
         if (index == array.length - 1)
-            throw new IndexOutOfBoundsException("В массиве нет места");
-        for (int i = this.index; i > index; i--) {
-            array[i + 1] = array[i];
+            throw new RuntimeException("В массиве нет места");
+        for (int i = this.count; i > index; i--) {
+            array[i] = array[i-1];
         }
-        this.index++;
-        return item;
+        array[index] = item;
+        this.count++;
+        return array[index];
     }
 
     @Override
     public String set(int index, String item) {
-        if (index > this.index)
+        if(item==null)
+            throw new NullPointerException("В массиве запрещено хранить null значения")
+        if (index > this.count)
             throw new IndexOutOfBoundsException("Количество элементов в массиве меньше данного числа");
         array[index] = item;
         return item;
@@ -42,23 +49,21 @@ public class StringListImp implements StringList {
 
     @Override
     public String remove(String item) {
-        if (index > this.index)
-            throw new IndexOutOfBoundsException("Количество элементов в массиве меньше данного числа");
         int indexSearchElement = indexOf(item);
         if (indexSearchElement == -1)
             throw new RuntimeException("Такого элемента нет в списке");
         String removeElement = array[indexSearchElement];
-        remove(index);
+        remove(count);
         return removeElement;
     }
 
     @Override
     public String remove(int index) {
-        if (index > this.index)
+        if (index > this.count)
             throw new IndexOutOfBoundsException("Количество элементов в массиве меньше данного числа");
         String returnElement = array[index];
-        this.index--;
-        for (int i = index; i < this.index; i++) {
+        this.count--;
+        for (int i = index; i < this.count; i++) {
             array[i] = array[i + 1];
         }
         return returnElement;
@@ -71,7 +76,7 @@ public class StringListImp implements StringList {
 
     @Override
     public int indexOf(String item) {
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i < count; i++) {
             if (array[i].equals(item))
                 return i;
         }
@@ -80,7 +85,7 @@ public class StringListImp implements StringList {
 
     @Override
     public int lastIndexOf(String item) {
-        for (int i = array.length - 1; i >= 0; i--) {
+        for (int i = this.count -1; i >= 0; i--) {
             if (array[i].equals(item))
                 return i;
         }
@@ -89,7 +94,7 @@ public class StringListImp implements StringList {
 
     @Override
     public String get(int index) {
-        if (index > this.index)
+        if (index > this.count)
             throw new IndexOutOfBoundsException("Количество элементов в массиве меньше данного числа");
         return array[index];
     }
@@ -98,9 +103,9 @@ public class StringListImp implements StringList {
     public boolean equals(StringList otherList) {
         if(otherList==null)
             throw new NullPointerException();
-        if (otherList.size() != index)
+        if (otherList.size() != count)
             return false;
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i < count; i++) {
             if (!array[i].equals(otherList.get(i)))
                 return false;
         }
@@ -109,12 +114,12 @@ public class StringListImp implements StringList {
 
     @Override
     public int size() {
-        return index;
+        return count;
     }
 
     @Override
     public boolean isEmpty() {
-        return index > -1;
+        return count == 0;
     }
 
     @Override
@@ -124,6 +129,6 @@ public class StringListImp implements StringList {
 
     @Override
     public String[] toArray() {
-        return Arrays.copyOf(array, index);
+        return Arrays.copyOf(array, count);
     }
 }
