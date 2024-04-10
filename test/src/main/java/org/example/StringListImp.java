@@ -13,7 +13,7 @@ public class StringListImp implements StringList {
     @Override
     public String add(String item) {
         if(item==null)
-            throw new NullPointerException("В массиве запрещено хранить null значения")
+            throw new NullPointerException("В массиве запрещено хранить null значения");
         if (count < array.length) {
             array[count] = item;
             count++;
@@ -24,7 +24,7 @@ public class StringListImp implements StringList {
     @Override
     public String add(int index, String item) {
         if(item==null)
-            throw new NullPointerException("В массиве запрещено хранить null значения")
+            throw new NullPointerException("В массиве запрещено хранить null значения");
         if (index > this.count)
             throw new IndexOutOfBoundsException("Количество элементов в массиве меньше данного числа");
         if (index == array.length - 1)
@@ -40,7 +40,7 @@ public class StringListImp implements StringList {
     @Override
     public String set(int index, String item) {
         if(item==null)
-            throw new NullPointerException("В массиве запрещено хранить null значения")
+            throw new NullPointerException("В массиве запрещено хранить null значения");
         if (index > this.count)
             throw new IndexOutOfBoundsException("Количество элементов в массиве меньше данного числа");
         array[index] = item;
