@@ -29,21 +29,34 @@ public class IntegerListImp implements IntegerList {
             throw new IndexOutOfBoundsException("В массиве нет такого индекса");
     }
 
-    private void swapElements( int indexA, int indexB) {
-        int tmp = array[indexA];
-        array[indexA] = array[indexB];
-        array[indexB] = tmp;
+    private static void swapElements(Integer[] arr, int left, int right) {
+        int temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
     }
 
-    public void sortBubble() {
-        for (int i = 0; i < size - 1; i++) {
-            for (int j = 0; j < size - 1 - i; j++) {
-                if (array[j] > array[j + 1]) {
-                    swapElements( j, j + 1);
-                }
+    private static int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                swapElements(arr, i, j);
             }
         }
+        swapElements(arr, i + 1, end);
+        return i + 1;
     }
+
+    public void quickSort(Integer[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+            quickSort(arr, begin, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, end);
+        }
+    }
+
 
     public boolean binarySearch(int element) {
         int min = 0;
@@ -120,7 +133,7 @@ public class IntegerListImp implements IntegerList {
     @Override
     public boolean contains(Integer item) {
         isNullException(item);
-        sortBubble();
+        quickSort(array, 0, size-1);
         return binarySearch(item);
     }
 
