@@ -2,6 +2,8 @@ package org.example;
 
 import org.example.exception.NullDataException;
 
+import java.util.Arrays;
+
 public class IntegerListImp implements IntegerList {
 
     private int size;
@@ -27,6 +29,42 @@ public class IntegerListImp implements IntegerList {
             throw new IndexOutOfBoundsException("В массиве нет такого индекса");
     }
 
+    private void swapElements( int indexA, int indexB) {
+        int tmp = array[indexA];
+        array[indexA] = array[indexB];
+        array[indexB] = tmp;
+    }
+
+    public void sortBubble() {
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = 0; j < size - 1 - i; j++) {
+                if (array[j] > array[j + 1]) {
+                    swapElements( j, j + 1);
+                }
+            }
+        }
+    }
+
+    public boolean binarySearch(int element) {
+        int min = 0;
+        int max = array.length - 1;
+
+        while (min <= max) {
+            int mid = (min + max) / 2;
+
+            if (element == array[mid]) {
+                return true;
+            }
+
+            if (element < array[mid]) {
+                max = mid - 1;
+            } else {
+                min = mid + 1;
+            }
+        }
+        return false;
+    }
+
     @Override
     public Integer add(Integer item) {
         isNullException(item);
@@ -41,7 +79,7 @@ public class IntegerListImp implements IntegerList {
     public Integer add(int index, Integer item) {
         isNullException(item);
         isIndexOfException(index);
-        if (size >= array.length)
+        if (size == array.length)
             newArraySize();
         for (int i = size; i > index; i--) {
             array[i] = array[i - 1];
@@ -55,13 +93,35 @@ public class IntegerListImp implements IntegerList {
     public Integer set(int index, Integer item) {
         isNullException(item);
         isIndexOfException(index);
-        array[index]=item;
+        array[index] = item;
         return array[index];
     }
 
     @Override
-    public Integer remove(Integer item) {
-        return null;
+    public int indexOf(Integer item) {
+        isNullException(item);
+        for (int i = 0; i < size; i++) {
+            if (array[i].equals(item))
+                return array[i];
+        }
+        return -1;
+    }
+
+    @Override
+    public int lastIndexOf(Integer item) {
+        isNullException(item);
+        for (int i = size - 1; i >= 0; i--) {
+            if (array[i].equals(item))
+                return array[i];
+        }
+        return -1;
+    }
+
+    @Override
+    public boolean contains(Integer item) {
+        isNullException(item);
+        sortBubble();
+        return binarySearch(item);
     }
 
     @Override
@@ -69,36 +129,28 @@ public class IntegerListImp implements IntegerList {
         isNullException(index);
         isIndexOfException(index);
         size--;
-        int removeItem= array[index];
+        int removeItem = array[index];
         for (int i = index; i < size; i++) {
-            array[i]=array[i+1];
+            array[i] = array[i + 1];
         }
         return removeItem;
     }
 
     @Override
-    public boolean contains(Integer item) {
-        return false;
-    }
-
-    @Override
-    public int indexOf(Integer item) {
-        return 0;
-    }
-
-    @Override
-    public int lastIndexOf(Integer item) {
-        return 0;
+    public Integer remove(Integer item) {
+        isNullException(item);
+        return remove(indexOf(item));
     }
 
     @Override
     public Integer get(int index) {
+        isIndexOfException(index);
         return array[index];
     }
 
     @Override
     public boolean equals(IntegerList otherList) {
-        return false;
+        return Arrays.equals(array, otherList.toArray());
     }
 
     @Override
@@ -108,16 +160,17 @@ public class IntegerListImp implements IntegerList {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
     public void clear() {
-
+        array = new Integer[10];
+        size = 0;
     }
 
     @Override
     public Integer[] toArray() {
-        return new Integer[0];
+        return Arrays.copyOf(array, size);
     }
 }
