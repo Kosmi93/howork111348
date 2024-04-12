@@ -96,7 +96,7 @@ class IntegerListImpTest {
 
     @Test
     void isEmpty() {
-        assertEquals(out.isEmpty(),false);
+        assertEquals(out.isEmpty(), false);
     }
 
     @Test
@@ -107,6 +107,6 @@ class IntegerListImpTest {
 
     @Test
     void toArray() {
-        assertArrayEquals(out.toArray(), new Integer[]{1,2});
+        assertArrayEquals(out.toArray(), new Integer[]{1, 2});
     }
 }
